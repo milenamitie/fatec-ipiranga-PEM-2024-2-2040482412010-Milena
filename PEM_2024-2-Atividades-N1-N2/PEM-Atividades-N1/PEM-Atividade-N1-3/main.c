@@ -1,3 +1,12 @@
+/*--------------------------------------------------------*
+* Disciplina: Programaçao Estruturada e Modular *
+*          Prof. Carlos Veríssimo                                    *
+*--------------------------------------------------------*
+* Objetivo do Programa: Atividade N_3: Tabuleiro de Xadrez
+* Data - 30/08/2024                                      * 
+* Autor: Milena Mitie*
+*--------------------------------------------------------*/
+
 #include <stdio.h>
 #include <string.h>
 

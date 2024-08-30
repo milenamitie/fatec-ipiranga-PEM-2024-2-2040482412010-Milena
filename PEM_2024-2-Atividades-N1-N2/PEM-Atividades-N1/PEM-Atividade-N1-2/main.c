@@ -1,3 +1,12 @@
+/*-----------------------------------------------------------------*
+* Disciplina: Programaçao Estruturada e Modular *
+*          Prof. Carlos Veríssimo                                    *
+*------------------------------------------------------------------*
+* Objetivo do Programa: Atividade_N1_2: Praticando acesso a vetores
+* Data - 30/08/2024                                                * 
+* Autor: Milena Mitie*
+*------------------------------------------------------------------*/
+
 #include <stdio.h>
 #include <stdlib.h>
 
