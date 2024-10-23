@@ -1,0 +1,160 @@
+/*---------------------------------------------------------*
+* Disciplina: Programaçao Estruturada e Modular            *
+*          Prof. Carlos Veríssimo                          *                                             *                                                          *
+*----------------------------------------------------------*
+* Objetivo do Programa: N2-4-Manipulando Struct            * 
+* Data - 25/10/2024                                        * 
+* Autor: Milena Mitie                                      *
+*---------------------------------------------------------*/
+
+
+#include <stdio.h>
+#include <string.h>
+
+#define MAX_PRODUTOS 100
+
+// Definição da struct Produto
+typedef struct {
+    int id;
+    char nome[50];
+    char descricao[100];
+    float preco;
+    int quantidade;
+} Produto;
+
+// Funções
+void inserirProduto(Produto *produtos, int *n);
+void listarProdutos(Produto *produtos, int n);
+void ordenarProdutosPorNome(Produto *produtos, int n);
+void simularCompra(Produto *produtos, int n);
+Produto* buscarProdutoPorId(Produto *produtos, int n, int id);
+
+int main() {
+    Produto produtos[MAX_PRODUTOS];
+    int n = 0; // Contador de produtos
+    int opcao;
+
+    do {
+        printf("\n==== Loja de Produtos Eletrônicos ====\n");
+        printf("1. Inserir Produto\n");
+        printf("2. Listar Produtos\n");
+        printf("3. Simular Compra\n");
+        printf("0. Sair\n");
+        printf("Escolha uma opção: ");
+        scanf("%d", &opcao);
+        getchar(); // Limpar buffer do teclado
+
+        switch(opcao) {
+            case 1:
+                inserirProduto(produtos, &n);
+                break;
+            case 2:
+                listarProdutos(produtos, n);
+                break;
+            case 3:
+                simularCompra(produtos, n);
+                break;
+            case 0:
+                printf("Saindo...\n");
+                break;
+            default:
+                printf("Opção inválida!\n");
+        }
+    } while (opcao != 0);
+
+    return 0;
+}
+
+// Função para inserir um novo produto
+void inserirProduto(Produto *produtos, int *n) {
+    if (*n >= MAX_PRODUTOS) {
+        printf("Limite de produtos atingido!\n");
+        return;
+    }
+
+    Produto *p = &produtos[*n];
+    p->id = *n + 1; // Gerar ID sequencial
+    printf("Inserindo Produto #%d\n", p->id);
+    printf("Nome: ");
+    fgets(p->nome, 50, stdin);
+    p->nome[strcspn(p->nome, "\n")] = 0; // Remover nova linha
+    printf("Descrição: ");
+    fgets(p->descricao, 100, stdin);
+    p->descricao[strcspn(p->descricao, "\n")] = 0;
+    printf("Preço: ");
+    scanf("%f", &p->preco);
+    printf("Quantidade em estoque: ");
+    scanf("%d", &p->quantidade);
+    getchar(); // Limpar buffer do teclado
+
+    (*n)++;
+    printf("Produto inserido com sucesso!\n");
+}
+
+// Função para listar produtos ordenados por nome
+void listarProdutos(Produto *produtos, int n) {
+    if (n == 0) {
+        printf("Nenhum produto cadastrado.\n");
+        return;
+    }
+
+    ordenarProdutosPorNome(produtos, n);
+
+    printf("\n==== Lista de Produtos ====\n");
+    for (int i = 0; i < n; i++) {
+        Produto *p = &produtos[i];
+        printf("ID: %d | Nome: %s | Preço: R$%.2f | Estoque: %d\n",
+               p->id, p->nome, p->preco, p->quantidade);
+    }
+}
+
+// Função para ordenar produtos pelo nome (Bubble Sort)
+void ordenarProdutosPorNome(Produto *produtos, int n) {
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = 0; j < n - i - 1; j++) {
+            if (strcmp(produtos[j].nome, produtos[j + 1].nome) > 0) {
+                Produto temp = produtos[j];
+                produtos[j] = produtos[j + 1];
+                produtos[j + 1] = temp;
+            }
+        }
+    }
+}
+
+// Função para simular a compra de um produto
+void simularCompra(Produto *produtos, int n) {
+    if (n == 0) {
+        printf("Nenhum produto cadastrado.\n");
+        return;
+    }
+
+    int id, quantidadeDesejada;
+    printf("Digite o ID do produto que deseja comprar: ");
+    scanf("%d", &id);
+    Produto *p = buscarProdutoPorId(produtos, n, id);
+
+    if (p == NULL) {
+        printf("Produto inexistente!\n");
+        return;
+    }
+
+    printf("Digite a quantidade que deseja comprar: ");
+    scanf("%d", &quantidadeDesejada);
+
+    if (quantidadeDesejada > p->quantidade) {
+        printf("Quantidade insuficiente em estoque. Estoque disponível: %d\n", p->quantidade);
+    } else {
+        p->quantidade -= quantidadeDesejada;
+        printf("Compra realizada com sucesso! Produto: %s | Quantidade comprada: %d\n", p->nome, quantidadeDesejada);
+    }
+}
+
+// Função para buscar produto por ID
+Produto* buscarProdutoPorId(Produto *produtos, int n, int id) {
+    for (int i = 0; i < n; i++) {
+        if (produtos[i].id == id) {
+            return &produtos[i];
+        }
+    }
+    return NULL;
+}
